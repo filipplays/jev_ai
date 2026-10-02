@@ -1,4 +1,6 @@
-.venv
-__pycache__
-jev_venv
-node_modules
+.venv/
+__pycache__/
+jev_venv/
+node_modules/
+jev_data.txt
+jev_mobile.py
