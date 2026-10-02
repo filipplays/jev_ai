@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>JEV Daily Outfit (GitHub Pages)</title>
+    <style>
+        /* Minimal inline styles copied from original for compactness */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial;
+            padding: 12px;
+            background: #f4f7fb;
+            color: #0f172a
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 12px;
+            border: 1px solid #e6eef8;
+            box-shadow: 0 6px 18px rgba(2, 6, 23, 0.03);
+            max-width: 900px;
+            margin: auto
+        }
+
+        button {
+            background: #0f766e;
+            color: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            border: 0;
+            font-weight: 600
+        }
+
+        pre {
+            white-space: pre-wrap;
+            background: #fcfdff;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #e6eef8
+        }
+    </style>
+</head>
+
+<body>
+    <main class="card">
+        <h1>JEV Daily Outfit</h1>
+        <p id="info">This page is prepared for GitHub Pages. It posts location to your Cloudflare Worker and shows JEV's
+            response.</p>
+
+        <div style="margin-top:10px">
+            <button id="runBtn">Refresh Today Outfit</button>
+            <div id="status" style="margin-top:8px;color:#475569"></div>
+        </div>
+
+        <section id="answers" style="margin-top:12px;display:none">
+            <h2>JEV Answer</h2>
+            <div id="answersInner"></div>
+            <p id="meta" style="color:#64748b"></p>
+        </section>
+
+        <section id="weather" style="margin-top:12px;display:none">
+            <h2>Weather Used</h2>
+            <pre id="weatherText"></pre>
+        </section>
+
+        <section id="raw" style="margin-top:12px;display:none">
+            <h2>Raw JSON</h2>
+            <pre id="rawJson"></pre>
+        </section>
+    </main>
+
+    <script>
+        // Replace this with your published Worker URL after deploy.
+        const WORKER_URL = "https://<your-worker>.workers.dev";
+
+        // Default coordinates (you can change or implement geolocation)
+        const DEFAULT_LAT = 46.0569;
+        const DEFAULT_LON = 14.5058;
+
+        const runBtn = document.getElementById('runBtn');
+        const statusEl = document.getElementById('status');
+        const answersSection = document.getElementById('answers');
+        const answersInner = document.getElementById('answersInner');
+        const weatherSection = document.getElementById('weather');
+        const weatherText = document.getElementById('weatherText');
+        const rawSection = document.getElementById('raw');
+        const rawJson = document.getElementById('rawJson');
+        const meta = document.getElementById('meta');
+
+        function setStatus(s) { statusEl.textContent = s }
+
+        async function callWorker(lat, lon) {
+            const res = await fetch(WORKER_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ lat, lon })
+            });
+            if (!res.ok) throw new Error('Worker error: ' + res.status + ' ' + res.statusText);
+            return res.json();
+        }
+
+        function renderJev(jev) {
+            answersInner.innerHTML = '';
+            if (!jev || !jev.answers) { answersInner.textContent = 'No answers'; return }
+            for (const [k, v] of Object.entries(jev.answers)) {
+                const wrap = document.createElement('div');
+                wrap.style.marginBottom = '8px';
+                wrap.innerHTML = `<strong>${k.replaceAll('_', ' ')}</strong>: ${v.choice || 'n/a'} <br/>confidence: ${Math.round((v.confidence || 0) * 100)}%`;
+                answersInner.appendChild(wrap);
+            }
+            meta.textContent = 'Model: ' + (jev.model || 'unknown') + ' | usage: ' + JSON.stringify(jev.usage || {});
+            answersSection.style.display = 'block';
+        }
+
+        function buildWeatherString(data) {
+            try { return JSON.stringify(data, null, 2) } catch (e) { return String(data) }
+        }
+
+        async function runFlow() {
+            runBtn.disabled = true; setStatus('Contacting worker...');
+            try {
+                const data = await callWorker(DEFAULT_LAT, DEFAULT_LON);
+                // Worker returns: { weather: {...}, jev: {...} }
+                weatherText.textContent = buildWeatherString(data.weather || {});
+                weatherSection.style.display = 'block';
+                renderJev(data.jev || {});
+                rawJson.textContent = JSON.stringify(data, null, 2);
+                rawSection.style.display = 'block';
+                setStatus('Done.');
+            } catch (err) { setStatus('Error: ' + (err.message || err)) }
+            finally { runBtn.disabled = false }
+        }
+
+        runBtn.addEventListener('click', runFlow);
+        window.addEventListener('load', runFlow);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JEV Outfit Report</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --line: #cbd5e1;
+      --accent: #0ea5e9;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.45;
+      padding: 16px;
+    }
+    .card {
+      width: min(900px, 100%);
+      margin: 0 auto 14px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px;
+    }
+    h1 { margin: 0 0 8px; font-size: 1.25rem; }
+    .meta { color: var(--muted); font-size: 0.95rem; margin: 2px 0; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--line); }
+    th { font-size: 0.92rem; color: var(--muted); }
+    .pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #e0f2fe;
+      color: #075985;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    pre {
+      white-space: pre-wrap;
+      margin: 0;
+      font-size: 0.9rem;
+      color: #1e293b;
+    }
+  </style>
+</head>
+<body>
+  <section class="card">
+    <h1>Daily Outfit Answers</h1>
+    <p class="meta">Model: <span class="pill">jev-1.13.0</span></p>
+    <p class="meta">Generated: 2026-09-27 20:51</p>
+    <p class="meta">Tokens: input 943 | output 243</p>
+  </section>
+  <section class="card">
+    <table>
+      <thead>
+        <tr><th>Question</th><th>Answer</th><th>Confidence</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Outer Layer</td><td>light_jacket</td><td>67%</td></tr><tr><td>Top</td><td>long_sleeve</td><td>28%</td></tr><tr><td>Bottom</td><td>pants</td><td>61%</td></tr><tr><td>Umbrella Needed</td><td>no</td><td>99%</td></tr><tr><td>Highest Discomfort Risk</td><td>humidity</td><td>78%</td></tr>
+      </tbody>
+    </table>
+  </section>
+  <section class="card">
+    <h1>Weather Used</h1>
+    <pre>Weather data:
+Morning (06:00): Temperature: 8.01°C, Humidity: 100.00%, Precipitation: 0.00mm, Wind Speed: 1.44m/s
+Midday (12:00): Temperature: 16.56°C, Humidity: 63.00%, Precipitation: 0.00mm, Wind Speed: 4.80m/s
+Night (21:00): Temperature: 15.71°C, Humidity: 65.00%, Precipitation: 0.00mm, Wind Speed: 3.10m/s
+End of day (24:00): Temperature: 12.96°C, Humidity: 83.00%, Precipitation: 0.00mm, Wind Speed: 0.36m/s
+Daily Max Temperature: 21.46°C, Daily Min Temperature: 8.01°C
+</pre>
+  </section>
+</body>
+</html>

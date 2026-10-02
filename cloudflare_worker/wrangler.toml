@@ -1,0 +1,8 @@
+name = "jev-proxy-worker"
+compatibility_date = "2026-10-02"
+type = "javascript"
+
+# Set your account_id after running `wrangler login` and `wrangler whoami`
+# account_id = "your-cloudflare-account-id"
+
+# If you want to publish to a custom subdomain or route, configure here or use the Dashboard.
