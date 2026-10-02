@@ -3,4 +3,4 @@ __pycache__/
 jev_venv/
 node_modules/
 jev_data.txt
-jev_mobile.py
+jev_test.py
